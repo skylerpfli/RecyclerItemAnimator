@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="message_say">
+        <item>mine:你好，我是木雨</item>
+        <item>robot:你好，木头</item>
+        <item>robot:[滑稽]</item>
+        <item>mine:我是你的制造者，不准这样</item>
+        <item>robot:[撤回]</item>
+        <item>robot:好吧，你好，我是Robot</item>
+    </string-array>
+</resources>

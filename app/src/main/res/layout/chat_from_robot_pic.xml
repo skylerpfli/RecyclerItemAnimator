@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRecord_Chat_Msg_Content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/v_head_sys"
+        android:layout_width="46dp"
+        android:layout_height="46dp" />
+
+    <ImageView
+        android:id="@+id/iv_sys_say"
+        android:layout_width="58dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="62dp"
+        android:layout_toEndOf="@+id/v_head_sys"
+        android:minHeight="46dp"
+        android:paddingStart="24dp"
+        android:paddingTop="11dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="11dp"
+        android:text=""
+        android:textColor="#152036"
+        android:textSize="24dp" />
+
+</RelativeLayout>
