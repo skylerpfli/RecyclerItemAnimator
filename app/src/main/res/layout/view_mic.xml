@@ -29,5 +29,5 @@
         android:text="正在识别"
         android:textColor="@color/white"
         android:textSize="28sp"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 </FrameLayout>

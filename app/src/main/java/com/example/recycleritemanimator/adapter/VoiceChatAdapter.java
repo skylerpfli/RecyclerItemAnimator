@@ -1,7 +1,12 @@
 package com.example.recycleritemanimator.adapter;
 
+import com.example.recycleritemanimator.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.recycleritemanimator.R;
 import com.example.recycleritemanimator.msg.ChatMessage;
 import com.example.recycleritemanimator.msg.RobotPicMessage;
-import com.example.recycleritemanimator.msg.RobotTextMessage;
 
 import java.util.List;
 
@@ -39,10 +42,12 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
     static class ViewHolder extends RecyclerView.ViewHolder {
         int type;
         View view;
+        ImageView headView;//头像
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView;
+            headView = (ImageView) itemView.findViewById(R.id.v_head);
         }
     }
 
@@ -53,6 +58,7 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
             super(itemView);
             type = TYPE_HOLDER_TEXT;
             mContent = (TextView) itemView.findViewById(R.id.tv_content_say);
+
         }
     }
 
@@ -100,6 +106,17 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
                 ((PicHolder) viewHolder).mPic.setBackground(((RobotPicMessage) msg).drawable);
                 break;
         }
+
+
+        //设置头像，设置为圆形
+        if (msg.owner == ChatMessage.OWNER_MINE) {
+            Bitmap headBm = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.qzns_my);
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), headBm);
+            roundedBitmapDrawable.setCornerRadius(100);
+            roundedBitmapDrawable.setAntiAlias(true);
+            viewHolder.headView.setImageDrawable(roundedBitmapDrawable);
+        }
+
     }
 
     @Override

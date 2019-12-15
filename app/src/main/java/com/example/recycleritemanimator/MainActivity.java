@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.example.recycleritemanimator.widget.VerticalItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 /**
  * @author lipengfei
  * @date 2019/12/13
@@ -28,8 +31,8 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    //聊天RecycleView
-    private RecyclerView mChatRv;
+    //聊天RecyclerView
+    private RecyclerView mRecyclerView;
     private VoiceChatAdapter mAdapter;
     private List<ChatMessage> mChatContents;
 
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SPECIAL_STR_RECALL = "[撤回]";
 
     //每句对话的时间间隔
-    private static final int MESSAGE_DELAY_TIME = 1000;
+    private static final int MESSAGE_DELAY_TIME = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //初始化控件
-        mChatRv = (RecyclerView) findViewById(R.id.chat_rv);
+        mRecyclerView = (RecyclerView) findViewById(R.id.chat_rv);
         mMicView = (MicView) findViewById(R.id.v_Mic);
         mMicView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,12 +76,17 @@ public class MainActivity extends AppCompatActivity {
         //配置recyclerView
         mChatContents = new ArrayList<ChatMessage>();
         mAdapter = new VoiceChatAdapter(this, mChatContents);
-        mChatRv.setAdapter(mAdapter);
-        mChatRv.setLayoutManager(new LinearLayoutManager(this));
-        mChatRv.addItemDecoration(new VerticalItemDecoration((int) getResources().getDimension(R.dimen.decoration)));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new VerticalItemDecoration((int) getResources().getDimension(R.dimen.decoration)));
 
-        //配置动画
+        //配置为默认动画
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //设置添加、移除时间为1s
+        mRecyclerView.getItemAnimator().setAddDuration(1000);
+        mRecyclerView.getItemAnimator().setRemoveDuration(1000);
 
+//        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
     }
 
 
