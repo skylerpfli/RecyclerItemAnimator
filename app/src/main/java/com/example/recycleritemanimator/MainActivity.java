@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.recycleritemanimator.adapter.VoiceChatAdapter;
+import com.example.recycleritemanimator.animator.UpShowAnimator;
 import com.example.recycleritemanimator.msg.ChatMessage;
 import com.example.recycleritemanimator.msg.MessageFactory;
 import com.example.recycleritemanimator.utils.TextUtils;
@@ -21,6 +22,7 @@ import com.example.recycleritemanimator.widget.VerticalItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.BaseItemAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SPECIAL_STR_RECALL = "[撤回]";
 
     //每句对话的时间间隔
-    private static final int MESSAGE_DELAY_TIME = 2000;
+    private static final int MESSAGE_DELAY_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,15 +82,39 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new VerticalItemDecoration((int) getResources().getDimension(R.dimen.decoration)));
 
-        //配置为默认动画
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        //因为有些地方需要拿尺寸，所以在这里初始化动画(非必须)
+
+
+        /**
+         *   ----- 以下是配置动画 -----
+         * */
+/*
+        //加长时间的默认动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //设置添加、移除时间为1s
         mRecyclerView.getItemAnimator().setAddDuration(1000);
         mRecyclerView.getItemAnimator().setRemoveDuration(1000);
+*/
 
-//        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
+/*
+        //设置简单的上浮动画
+        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
+        //动画时间设置长，便于观察
+        mRecyclerView.getItemAnimator().setAddDuration(500);
+        mRecyclerView.getItemAnimator().setRemoveDuration(500);*/
+
+        //360度旋转上丢动画
+        mRecyclerView.setItemAnimator(new UpShowAnimator(mRecyclerView.getHeight(),mMicView.getHeight()));
+        //动画时间设置长，便于观察
+        mRecyclerView.getItemAnimator().setAddDuration(500);
+        mRecyclerView.getItemAnimator().setRemoveDuration(500);
+
     }
-
 
     //用于不断添加对话的handler
     private static final int WHAT = 0X1001;
@@ -157,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler.sendMessageDelayed(msg, MESSAGE_DELAY_TIME);
     }
 
-    //撤回机器人的最后一条图片消息
+    //撤回机器人的特定消息
     private void recallRobtPic() {
         for (int i = mChatContents.size() - 1; i >= 0; i--) {
 
