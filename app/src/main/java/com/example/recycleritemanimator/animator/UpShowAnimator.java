@@ -62,10 +62,11 @@ public class UpShowAnimator extends BaseItemAnimator{
         holder.itemView.animate()
                 .setDuration(getAddDuration())
                 .translationY(0)//回到原位置
-                .rotation(360)//旋转360度
+//                .rotation(360)//旋转360度
                 .alpha(1f)//透明度显现
                 .start();
     }
+
 
     
 }

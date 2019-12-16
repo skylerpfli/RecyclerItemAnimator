@@ -1,6 +1,7 @@
 package com.example.recycleritemanimator.adapter;
 
 import com.example.recycleritemanimator.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +32,7 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
     private static final String TAG = "VoiceChatAdapter";
     private List<ChatMessage> mChatMsgs;
 
+    private final static int TYPE_FOOT = 100; //recyclerView脚布局
     private final static int TYPE_HOLDER_TEXT = 101;//文本类消息
     private final static int TYPE_HOLDER_PIC = 102; //图片类消息
 
@@ -47,7 +49,6 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView;
-            headView = (ImageView) itemView.findViewById(R.id.v_head);
         }
     }
 
@@ -58,6 +59,7 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
             super(itemView);
             type = TYPE_HOLDER_TEXT;
             mContent = (TextView) itemView.findViewById(R.id.tv_content_say);
+            headView = (ImageView) itemView.findViewById(R.id.v_head);
 
         }
     }
@@ -69,6 +71,7 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
             super(itemView);
             type = TYPE_HOLDER_PIC;
             mPic = (ImageView) itemView.findViewById(R.id.iv_sys_say);
+            headView = (ImageView) itemView.findViewById(R.id.v_head);
         }
     }
 
@@ -90,13 +93,24 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
                 itemView = LayoutInflater.from(mContext).inflate(R.layout.chat_from_robot_pic, viewGroup, false);
                 holder = new PicHolder(itemView);
                 break;
+            case TYPE_FOOT:
+                //recycler脚
+                itemView = LayoutInflater.from(mContext).inflate(R.layout.layout_recycler_foot, viewGroup, false);
+                holder = new ViewHolder(itemView);
+                break;
         }
+
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int positon) {
+        if (positon >= mChatMsgs.size()) {
+            //屏蔽foot占位消息
+            return;
+        }
+
         ChatMessage msg = mChatMsgs.get(positon);
         switch (viewHolder.type) {
             case TYPE_HOLDER_TEXT:
@@ -120,17 +134,15 @@ public class VoiceChatAdapter extends RecyclerView.Adapter<VoiceChatAdapter.View
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
     public int getItemCount() {
-        return mChatMsgs.size();
+        return mChatMsgs.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
+        if (position >= mChatMsgs.size()) {
+            return TYPE_FOOT;
+        }
         return mChatMsgs.get(position).type;
     }
 

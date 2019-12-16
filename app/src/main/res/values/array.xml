@@ -7,14 +7,14 @@
         <item>mine:我是你的制造者，不准这样</item>
         <item>robot:[撤回]</item>
         <item>robot:好吧，你好，我是Robot</item>
-        <item>mine:我之前被你绕晕了，现在我要你一直说绕口令来惩罚你</item>
+<!--        <item>mine:我之前被你绕晕了，现在我要你一直说绕口令来惩罚你</item>
         <item>robot:怎么可以这样！</item>
         <item>mine:heiheiheihei~，你不知道我们工程师是万能的吗，开始吧！</item>
         <item>robot:我不~....吃布套不吐葡萄皮，不吃葡萄凹凸葡萄比</item>
-        <item>mine:不标准，再来</item>
-        <item>robot:。。。吃葡萄不吐葡萄皮，不吃葡萄倒吐葡萄皮</item>
+        <item>mine:不标准，快一点</item>
+        <item>robot:。。。吃葡萄不吐葡萄皮\n。。。不吃葡萄倒吐葡萄皮\n。。。吃葡萄不吐葡萄皮\n不吃皮</item>
         <item>mine:换一个</item>
-        <item>robot:。。。。。我选择go带</item>
+        <item>robot:。。。。。我选择go带</item>-->
 
     </string-array>
 </resources>

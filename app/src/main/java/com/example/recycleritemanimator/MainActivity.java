@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.recycleritemanimator.adapter.VoiceChatAdapter;
+import com.example.recycleritemanimator.animator.CustomAnimator;
 import com.example.recycleritemanimator.animator.UpShowAnimator;
 import com.example.recycleritemanimator.msg.ChatMessage;
 import com.example.recycleritemanimator.msg.MessageFactory;
@@ -93,26 +95,26 @@ public class MainActivity extends AppCompatActivity {
         /**
          *   ----- 以下是配置动画 -----
          * */
-/*
-        //加长时间的默认动画
+
+/*        //加长时间的默认动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //设置添加、移除时间为1s
         mRecyclerView.getItemAnimator().setAddDuration(1000);
-        mRecyclerView.getItemAnimator().setRemoveDuration(1000);
-*/
+        mRecyclerView.getItemAnimator().setRemoveDuration(1000);*/
 
 /*
         //设置简单的上浮动画
-        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
-        //动画时间设置长，便于观察
-        mRecyclerView.getItemAnimator().setAddDuration(500);
-        mRecyclerView.getItemAnimator().setRemoveDuration(500);*/
+        mRecyclerView.setItemAnimator(new SlideInUpAnimator());*/
 
-        //360度旋转上丢动画
-        mRecyclerView.setItemAnimator(new UpShowAnimator(mRecyclerView.getHeight(),mMicView.getHeight()));
-        //动画时间设置长，便于观察
-        mRecyclerView.getItemAnimator().setAddDuration(500);
-        mRecyclerView.getItemAnimator().setRemoveDuration(500);
+/*        //360度旋转上丢动画
+        mRecyclerView.setItemAnimator(new UpShowAnimator(mRecyclerView.getHeight(), mMicView.getHeight()));*/
+
+        //深入定制动画
+        mRecyclerView.setItemAnimator(new CustomAnimator(mRecyclerView.getHeight(), mMicView.getHeight()));
+
+        //动画时长
+        mRecyclerView.getItemAnimator().setAddDuration(300);
+        mRecyclerView.getItemAnimator().setRemoveDuration(400);
 
     }
 
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     //说第几条消息
     private void say(int index) {
+
         if (index >= mChatStrs.length) {
             return;
         }
@@ -164,23 +167,34 @@ public class MainActivity extends AppCompatActivity {
         } else if (who.equals(PREFIX_STR_ROTBOT)) {
 
             //添加机器人的消息
-            if (words.equals(SPECIAL_STR_FUNNY)) {
+            if (words.startsWith(SPECIAL_STR_FUNNY)) {
                 //滑稽
                 mChatContents.add(MessageFactory.getRobotPicMessage(getDrawable(R.drawable.funny)));
-                mAdapter.notifyItemChanged(mChatContents.size() - 1);
-            } else if (words.equals(SPECIAL_STR_RECALL)) {
+                mAdapter.notifyItemInserted(mChatContents.size() - 1);
+            } else if (words.startsWith(SPECIAL_STR_RECALL)) {
                 //撤回
                 recallRobtPic();
             } else {
                 //文本
                 mChatContents.add(MessageFactory.getRobotTextMessage(words));
-                mAdapter.notifyItemChanged(mChatContents.size() - 1);
+                mAdapter.notifyItemInserted(mChatContents.size() - 1);
             }
         }
+
+        smoothToEnd();
 
         //说下一句消息
         Message msg = mHandler.obtainMessage(WHAT, ++index);
         mHandler.sendMessageDelayed(msg, MESSAGE_DELAY_TIME);
+    }
+
+    private void smoothToEnd() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+            }
+        }, 300);//延迟一段时间，使其与Add动画平滑衔接。如果设置RecyclerView滑动速度变慢，效果会更好
     }
 
     //撤回机器人的特定消息
@@ -191,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             if ("你好，木头".equals(mChatContents.get(i).text)) {
                 mChatContents.remove(i);
                 mAdapter.notifyItemRemoved(i);
-                Toast toast = Toast.makeText(this, null, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
                 toast.setText("Robot撤回了第" + (i + 1) + "条消息");
                 toast.show();
                 break;
